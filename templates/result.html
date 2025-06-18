@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Result{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Heading -->
+    <h2 class="text-center text-success mb-4">Prediction Result</h2>
+
+    <!-- Leaf Image and Prediction -->
+    <div class="text-center">
+        <img src="{{ image_path }}" alt="Leaf Image" class="img-fluid rounded shadow mb-3" style="max-width: 400px;">
+        
+        <h3>
+            Prediction: <span class="text-danger">{{ prediction }}</span>
+        </h3>
+
+        {% if confidence %}
+            <p class="text-muted">Confidence: {{ confidence }}%</p>
+        {% endif %}
+    </div>
+
+    <!-- Suggestion or Tip Box -->
+    <div class="alert alert-warning mt-4" role="alert">
+        {% if prediction == 'Healthy' %}
+            ✅ This plant looks healthy. Keep maintaining regular watering and sunlight.
+        {% else %}
+            ⚠️ This plant may have <strong>{{ prediction }}</strong>. Consider consulting a local expert or applying suitable treatment.
+        {% endif %}
+    </div>
+
+    <!-- Logged-in User Actions -->
+    {% if session.get('username') %}
+        <div class="alert alert-info text-center">Welcome, {{ session.get('username') }}!</div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+            <a href="{{ url_for('history') }}" class="btn btn-success">View History</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            <a href="{{ url_for('upload') }}" class="btn btn-info">Try Another Image</a>
+            <a href="{{ url_for('download_report', image=image_path, prediction=prediction) }}" class="btn btn-outline-primary">
+                Download Report
+            </a>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+
+    <!-- Guest User Message -->
+    {% else %}
+        <div class="alert alert-info text-center">
+            <strong>Login or Register</strong> to get full treatment suggestions and download report.
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-3">
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-success">Register</a>
+            <a href="{{ url_for('upload') }}" class="btn btn-secondary">Try Another Image</a>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

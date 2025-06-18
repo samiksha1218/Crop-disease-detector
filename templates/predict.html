@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Result{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">🌿 Leaf Prediction Portal</h2>
+
+  <!-- Upload Form -->
+  <div class="card p-4 mb-4">
+    <form method="POST" action="{{ url_for('predict') }}" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="file">Upload Leaf Image:</label>
+        <input type="file" name="file" class="form-control-file" required>
+      </div>
+      <button type="submit" class="btn btn-primary">🔍 Predict</button>
+    </form>
+  </div>
+
+ <!-- Prediction Result -->
+{% if prediction_result %}
+<div class="card p-4 mb-4">
+  <h4 class="text-success">Prediction: {{ prediction_result }}</h4>
+  <p>Confidence: {{ confidence }}%</p>
+
+  {% if prediction_result != 'Healthy' %}
+  <a href="{{ url_for('treatment', disease_name=prediction_result) }}">
+      <button style="padding:10px 20px; background-color:#38a169; color:white; border:none; border-radius:5px; margin-top:20px;">
+          View Treatment Info
+      </button>
+  </a>
+  {% endif %}
+
+  <div class="text-center">
+    <img src="{{ url_for('static', filename='uploads/' + filename) }}" class="img-thumbnail" width="300">
+    <p class="text-muted mt-2">Uploaded Leaf Image</p>
+  </div>
+</div>
+{% endif %}
+
+
+  <!-- Plant Info -->
+  {% if plant_type and plant_category %}
+  <div class="card mt-4">
+    <div class="card-body">
+      <h4>🪴 Plant Type: <span class="text-success">{{ plant_type }}</span></h4>
+      <h5>🧾 Plant Category: <span class="text-primary">{{ plant_category }}</span></h5>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Disease Info -->
+  {% if diseases %}
+  <div class="card mt-4" id="disease-section">
+    <div class="card-header bg-danger text-white">🩺 Detected Diseases</div>
+    <div class="card-body">
+      {% for disease in diseases %}
+      <div class="mb-4 border p-3 rounded" id="card{{ loop.index }}">
+        <h5>🦠 Disease: {{ disease.name }} (Confidence: {{ disease.confidence }}%)</h5>
+        <p><strong>Symptoms:</strong> {{ disease.symptoms }}</p>
+        <p><strong>Cause:</strong> {{ disease.cause }}</p>
+        <p><strong>Remedy:</strong> {{ disease.remedy }}</p>
+        <button class="btn btn-outline-primary btn-sm mt-2" onclick="downloadCard('card{{ loop.index }}')">📥 Download This Info</button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Download All Info Button -->
+  <div class="mt-3">
+    <button class="btn btn-success" onclick="downloadAllDiseases()">📄 Download All Disease Info (PDF)</button>
+  </div>
+
+  <!-- Chart -->
+  <div class="card mt-4">
+    <div class="card-header bg-warning">📊 Disease Confidence Chart</div>
+    <div class="card-body text-center">
+      <canvas id="confidenceChart" style="max-height: 300px;"></canvas>
+      <button class="btn btn-outline-dark btn-sm mt-3" onclick="downloadChart()">📸 Download Chart as Image</button>
+    </div>
+  </div>
+  {% else %}
+  <div class="alert alert-success mt-4">
+    ✅ This leaf appears to be healthy. No disease detected!
+  </div>
+  {% endif %}
+
+  <!-- Report Download -->
+  {% if filename %}
+  <form action="{{ url_for('download_report', filename=filename) }}" method="post" class="mt-3">
+    <button type="submit" class="btn btn-success">📥 Download Report (PDF)</button>
+  </form>
+  {% endif %}
+
+  <!-- Navigation & Dark Mode -->
+  <div class="mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">⬅ Back to Dashboard</a>
+  </div>
+  <div class="text-center mt-3">
+    <button onclick="toggleDarkMode()" class="btn btn-dark">🌓 Toggle Dark Mode</button>
+  </div>
+
+  <!-- Helpful Links -->
+  <div class="card mt-4">
+    <div class="card-header bg-info text-white">🌍 Helpful Resources</div>
+    <div class="card-body">
+      <ul>
+        <li><a href="https://www.krishakjagat.org/" target="_blank">Krishak Jagat - Farmer's Knowledge Portal</a></li>
+        <li><a href="https://www.ikisan.com/" target="_blank">iKisan - Agricultural Info Hub</a></li>
+        <li><a href="https://agricoop.nic.in/" target="_blank">Ministry of Agriculture - India</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Google Translate -->
+  <div id="google_translate_element" class="mt-4 text-center"></div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<script>
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+  }
+
+  function downloadCard(id) {
+    const element = document.getElementById(id);
+    html2pdf().from(element).save(`${id}.pdf`);
+  }
+
+  function downloadAllDiseases() {
+    const section = document.getElementById('disease-section');
+    html2pdf().from(section).save('All_Disease_Info.pdf');
+  }
+
+  function downloadChart() {
+    const chartCanvas = document.getElementById('confidenceChart');
+    const link = document.createElement('a');
+    link.href = chartCanvas.toDataURL('image/png');
+    link.download = 'Disease_Confidence_Chart.png';
+    link.click();
+  }
+
+  {% if diseases %}
+  document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById('confidenceChart').getContext('2d');
+    const data = {{ diseases | tojson }};
+    const labels = data.map(d => d.name);
+    const confidences = data.map(d => d.confidence);
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Confidence (%)',
+          data: confidences,
+          backgroundColor: 'rgba(47, 143, 78, 0.6)',
+          borderColor: 'rgba(47, 143, 78, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+  });
+  {% endif %}
+</script>
+{% endblock %} 

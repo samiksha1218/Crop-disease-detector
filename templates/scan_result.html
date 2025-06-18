@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f9f3;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #2e8b57;
+            padding: 10px 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #2e8b57;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="{{ url_for('index') }}">Home</a>
+    </div>
+
+    <div class="container">
+        <h2>Scan Result</h2>
+        <p><span class="highlight">Predicted Disease:</span> {{ prediction }}</p>
+        <p><span class="highlight">Symptoms:</span> {{ symptoms }}</p>
+        <p><span class="highlight">Suggested Solution:</span> {{ solution }}</p>
+    </div>
+
+</body>
+</html>

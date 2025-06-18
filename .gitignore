@@ -1,0 +1,8 @@
+venv/ 
+venv/
+__pycache__/
+*.pyd
+*.dll
+*.h5
+*.db
+*.csv

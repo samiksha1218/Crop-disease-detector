@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan Leaf - PlantDoc</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-color: #f0f9f3;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            background-color: #4CAF50;
+            padding: 20px;
+            color: white;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .upload-container {
+            background-color: white;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .upload-container input[type="file"] {
+            margin: 20px 0;
+        }
+
+        .upload-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .upload-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        🌿 PlantDoc - Scan Leaf
+    </div>
+
+    <div class="upload-container">
+        <form method="POST" enctype="multipart/form-data">
+            <label for="leaf_image">Upload Leaf Image:</label><br>
+            <input type="file" name="leaf_image" accept="image/*" required><br>
+            <button type="submit">Scan</button>
+        </form>
+    </div>
+
+</body>
+</html>

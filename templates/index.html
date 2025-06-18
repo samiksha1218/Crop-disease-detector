@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome | Plant Disease Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { height: 100%; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-image: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1650&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .overlay {
+            background-color: rgba(255, 255, 255, 0.85);
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2e7d32;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 2px solid #2e7d32;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background-color: #2e7d32;
+            color: white;
+        }
+
+        .dark-mode-toggle {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #555;
+            margin-left: 15px;
+        }
+
+        .container-center {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #2e7d32;
+        }
+
+        p {
+            font-size: 1.25rem;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .btn-custom {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            margin: 10px;
+            background-color: #388e3c;
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #2e7d32;
+        }
+
+        .leaf-icon {
+            font-size: 4rem;
+            color: #66bb6a;
+            margin-bottom: 20px;
+        }
+
+        .dark-mode {
+            background-color: #121212 !important;
+            color: white;
+        }
+
+        .dark-mode .overlay {
+            background-color: rgba(18, 18, 18, 0.9);
+        }
+
+        .dark-mode h1,
+        .dark-mode p,
+        .dark-mode .navbar h2 {
+            color: white;
+        }
+
+        .dark-mode .nav-links a {
+            color: white;
+            border-color: white;
+        }
+
+        .dark-mode .nav-links a:hover {
+            background-color: white;
+            color: #121212;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay">
+        <div class="navbar">
+            <h2>🌿 PlantDoc</h2>
+            <div class="d-flex align-items-center">
+                <div class="nav-links">
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}">Register</a>
+                </div>
+                <div class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+            </div>   
+        </div>
+        <div class="container-center">
+            <div class="leaf-icon">🍃</div>
+            <h1>Welcome to Plant Disease Detection</h1>
+            <p>AI-powered early detection system to keep your plants healthy 🌾</p>
+            <a href="{{ url_for('upload') }}" class="btn btn-custom">Capture or Upload Leaf</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>

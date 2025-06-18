@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Treatment for {{ disease_name }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2f855a;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section h2 {
+            color: #2c5282;
+        }
+        .section p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3182ce;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Treatment for: {{ disease_name }}</h1>
+
+        <div class="section">
+            <h2>🧪 Recommended Medicine</h2>
+            <p>{{ suggestion.medicine }}</p>
+        </div>
+
+        <div class="section">
+            <h2>🌿 Suggested Supplements</h2>
+            <p>{{ suggestion.supplements }}</p>
+        </div>
+
+        <div class="section">
+            <h2>🛡️ Pesticides</h2>
+            <p>{{ suggestion.pesticides }}</p>
+        </div>
+
+        <div class="section">
+            <h2>📌 Preventive Tips</h2>
+            <p>{{ suggestion.tips }}</p>
+        </div>
+
+        <a class="back-link" href="{{ url_for('predict') }}">← Back to Prediction</a>
+    </div>
+</body>
+</html>
